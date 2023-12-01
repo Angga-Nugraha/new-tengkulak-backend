@@ -17,6 +17,12 @@ export const getUserById = wrapAsync(async (req, res) => {
   const { id } = req.params;
   const data = await User.findById(id);
 
+  if (!data) {
+    return res.status(404).json({
+      status: "failed",
+      msg: "user not found"
+    });
+  }
   res.status(200).json({
     status: "success",
     data,
