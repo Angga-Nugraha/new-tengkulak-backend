@@ -6,12 +6,12 @@ import { verifyToken } from "../midleware/verifyToken.js";
 const router = express.Router();
 
 
-router.get('/product/search', verifyToken, verifyUser, searchProduct);
-router.get('/product', verifyToken, verifyUser, getAllProduct);
-router.post('/product', verifyToken, verifyUser, createProduct);
-router.get('/product/:id', verifyToken, verifyUser, getProductById);
-router.delete('/product/:id', verifyToken, verifyUser, deleteProduct);
-router.get('/product/category/:category', verifyToken, verifyUser, getProductByCategory);
+router.get('/api/product/search', verifyToken, verifyUser, searchProduct);
+router.get('/api/product', verifyToken, verifyUser, getAllProduct);
+router.post('/api/product', verifyToken, verifyUser, createProduct);
+router.get('/api/product/:id', verifyToken, verifyUser, getProductById);
+router.delete('/api/product/:id', verifyToken, verifyUser, deleteProduct);
+router.get('/api/product/category/:category', verifyToken, verifyUser, getProductByCategory);
 
 
 export default router;

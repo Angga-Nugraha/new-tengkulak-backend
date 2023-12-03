@@ -5,8 +5,8 @@ import { verifyInput } from "../midleware/verifyInput.js";
 
 const router = express.Router();
 
-router.post("/register", verifyInput, register);
-router.post("/login", login);
-router.delete("/logout", logout);
+router.post("/Auth/register", verifyInput, register);
+router.post("/Auth/login", login);
+router.delete("/Auth/logout", logout);
 
 export default router;
