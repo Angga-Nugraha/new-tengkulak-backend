@@ -19,6 +19,8 @@ connectDb().then((_) => console.log("Connection to MongoDb"))
     throw err;
   });;
 
+
+
 app.use(express.static("public"));
 
 app.use(

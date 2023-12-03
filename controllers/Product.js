@@ -22,7 +22,7 @@ export const createProduct = wrapAsync(async (req, res) => {
 
     res.status(200).json({
         status: "success",
-        product
+        data: product
     });
 });
 
@@ -31,7 +31,7 @@ export const getAllProduct = wrapAsync(async (req, res) => {
 
     res.status(200).json({
         status: "success",
-        product
+        data: product
     });
 });
 
@@ -43,7 +43,7 @@ export const getProductByCategory = wrapAsync(async (req, res) => {
 
     res.status(200).json({
         status: "success",
-        product
+        data: product
     });
 });
 
@@ -59,7 +59,7 @@ export const getProductById = wrapAsync(async (req, res) => {
     }
     res.status(200).json({
         status: "success",
-        product
+        data: product
     });
 });
 
@@ -73,6 +73,23 @@ export const searchProduct = wrapAsync(async (req, res) => {
 
     res.status(200).json({
         status: "success",
-        product
+        data: product
+    });
+});
+
+export const deleteProduct = wrapAsync(async (req, res) => {
+    const { id } = req.params;
+
+    const product = await Product.findOneAndDelete({ _id: id });
+
+    if (!product) {
+        return res.status(404).json({
+            status: "failed",
+            msg: "product not found"
+        });
+    }
+    res.status(200).json({
+        status: "success",
+        msg: "product deleted"
     });
 });

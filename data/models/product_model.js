@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import fs from "fs";
+import { ImageProduct } from "./avatar_model.js";
+import { deleteProductId } from "../../utils/utils.js";
 
 
 const productSchema = new mongoose.Schema({
@@ -34,6 +37,13 @@ const productSchema = new mongoose.Schema({
         type: [String],
     },
 }, { timestamps: true, validateBeforeSave: true });
+
+productSchema.post("findOneAndDelete", async function (product) {
+    if (product) {
+        await ImageProduct.findOneAndDelete({ productId: product._id });
+        deleteProductId(product.userId, product._id);
+    }
+});
 
 
 export const Product = mongoose.model('Product', productSchema);

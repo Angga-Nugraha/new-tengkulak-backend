@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
-import { Avatar } from "./avatar_model.js";
 import fs from "fs";
+
+import { Avatar, ImageProduct } from "./avatar_model.js";
+import { Product } from "./product_model.js";
+import { deleteProductUser, deleteUserImage } from "../../utils/utils.js";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -41,9 +44,21 @@ const userSchema = new mongoose.Schema({
 
 userSchema.post("findOneAndDelete", async function (user) {
   if (user) {
-    await Avatar.deleteOne({ userId: user._id });
-    const filepath = `./public/user/${user.image.split('/')[4]}`;
-    fs.unlinkSync(filepath);
+    if (!user.image) {
+      deleteProductUser(user._id);
+
+      await Avatar.deleteOne({ userId: user._id });
+      await Product.deleteMany({ userId: user._id });
+      await ImageProduct.deleteMany({ userId: user._id });
+
+    } else {
+      deleteUserImage(user._id);
+      deleteProductUser(user._id);
+
+      await Avatar.deleteOne({ userId: user._id });
+      await Product.deleteMany({ userId: user._id });
+      await ImageProduct.deleteMany({ userId: user._id });
+    }
   }
 });
 
