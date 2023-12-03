@@ -6,7 +6,7 @@ import { createFolder } from "../utils/utils.js";
 
 const router = express.Router();
 
-router.post("/api/user/image/upload", verifyUser, uploadAvatarImage.single('image'), uploadAvatar);
-router.post('/api/product/upload/:id', verifyUser, createFolder, uploadProductImage.array('image', 4), uploadproduct);
+router.post("/api/upload/user/", verifyUser, uploadAvatarImage.single('image'), uploadAvatar);
+router.post('/api/upload/product/:id', verifyUser, createFolder, uploadProductImage.array('image', 4), uploadproduct);
 
 export default router;

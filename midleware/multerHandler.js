@@ -1,16 +1,13 @@
 import multer from "multer";
 import path from "path";
 import md5 from "md5";
-import fs from "fs";
-import { Product } from "../data/models/product_model.js";
-import { wrapAsync } from "../utils/wrapAsync.js";
 
 
 const storageA = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "./public/user");
     },
-    filename: (req, file, cb, next) => {
+    filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         const filename = req.session.userId + ext;
         cb(null, filename);
