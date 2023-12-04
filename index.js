@@ -9,16 +9,18 @@ import userRouter from "./routes/user_route.js";
 import authRouter from "./routes/auth_route.js";
 import uploadRouter from "./routes/upload_route.js";
 import productRouter from "./routes/product_route.js";
+import cartRouter from './routes/cart_route.js';
 import { dbError, errorMessage } from "./midleware/errorHandler.js";
 
 dotenv.config(".env");
 const app = express();
 
-connectDb().then((_) => console.log("Connection to MongoDb"))
-  .catch((err) => {
-    throw err;
-  });;
-
+connectDb()
+  .then(() => console.info(`Connected to database`)
+  ).catch((err) => {
+    console.error(`Connection error: ${err.stack}`);
+    process.exit(1);
+  });
 
 
 app.use(express.static("public"));
@@ -45,6 +47,7 @@ app.use(userRouter);
 app.use(authRouter);
 app.use(uploadRouter);
 app.use(productRouter);
+app.use(cartRouter);
 
 app.use(dbError);
 app.use(errorMessage);

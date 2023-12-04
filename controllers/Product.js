@@ -35,6 +35,15 @@ export const getAllProduct = wrapAsync(async (req, res) => {
     });
 });
 
+export const getMyProduct = wrapAsync(async (req, res) => {
+    const userId = req.session.userId;
+    const data = await Product.find({ userId });
+    res.status(200).json({
+        status: 'success',
+        data
+    });
+});
+
 export const getProductByCategory = wrapAsync(async (req, res) => {
     const { category } = req.params;
     const product = await Product.find({

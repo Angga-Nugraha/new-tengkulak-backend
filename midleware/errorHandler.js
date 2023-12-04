@@ -11,8 +11,8 @@ export const dbError = (err, req, res, next) => {
   if (err.name === "MongoServerError") {
     const msg = Object.values(err.keyValue)[0];
 
-    err.status = 404;
-    err.message = `${msg} is already registered`;
+    err.status = 409;
+    err.message = `${msg} is already exists`;
   }
   next(err);
 };

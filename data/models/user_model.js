@@ -4,6 +4,7 @@ import fs from "fs";
 import { Avatar, ImageProduct } from "./avatar_model.js";
 import { Product } from "./product_model.js";
 import { deleteProductUser, deleteUserImage } from "../../utils/utils.js";
+import { Cart } from "./cart_model.js";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -50,6 +51,7 @@ userSchema.post("findOneAndDelete", async function (user) {
       await Avatar.deleteOne({ userId: user._id });
       await Product.deleteMany({ userId: user._id });
       await ImageProduct.deleteMany({ userId: user._id });
+      await Cart.deleteMany({ userId: user._id });
 
     } else {
       deleteUserImage(user._id);
@@ -58,6 +60,7 @@ userSchema.post("findOneAndDelete", async function (user) {
       await Avatar.deleteOne({ userId: user._id });
       await Product.deleteMany({ userId: user._id });
       await ImageProduct.deleteMany({ userId: user._id });
+      await Cart.deleteMany({ userId: user._id });
     }
   }
 });
