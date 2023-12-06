@@ -9,30 +9,30 @@ import { Product } from "../data/models/product_model.js";
 
 export const uploadAvatar = wrapAsync(async (req, res) => {
     const id = req.session.userId;
+    const image = req.file;
+    const ext = path.extname(image.originalname);
 
-    if (!req.file) {
+    if (!image) {
         return res.status(404).json({
             status: "failed",
-            msg: "sellect some images"
+            msg: "select some images"
         });
     }
 
-    const ext = path.extname(req.file.originalname);
-    const filename = id + ext;
-
     const avatar = new Avatar({
         img: {
-            data: fs.readFileSync(path.join('./public/user/' + filename)),
+            data: fs.readFileSync(path.join(`./public/users/${id}${ext}`)),
             contentType: `image/${ext}`
         },
         userId: id,
     });
 
-    const url = `${req.protocol}://${req.get('host')}/user/${filename}`;
+    const url = `${req.protocol}://${req.get('host')}/users/${id}${ext}`;
 
     await User.findByIdAndUpdate(id, {
         image: url
     }, { new: true });
+
 
     await avatar.save();
 
@@ -47,23 +47,25 @@ export const uploadproduct = wrapAsync(async (req, res) => {
     const userId = req.session.userId;
     const images = req.files;
 
+    if (images.length < 1) return res.status(400).json({
+        status: "failed",
+        msg: "select some image"
+    });
     const imageProduct = [];
     const imageUrl = [];
     const product = await Product.findById(id);
 
-    if (images.length < 1) return res.status(400).json({
-        status: "failed",
-        msg: "sellect some image"
-    });
-
     for (let image of images) {
-        const ext = path.extname(image.filename);
+        const ext = path.extname(image.originalname);
+
+
         const imgUrl = `${req.protocol}://${req.get('host')}/product/${userId}/${id}/${image.filename}`;
         const imgs = {
-            data: fs.readFileSync(path.join(`./public/product/${userId}/${id}/` + image.filename,)),
+            data: fs.readFileSync(image.path),
             contentType: `image/${ext}`,
             url: imgUrl,
         };
+
         imageUrl.push(imgUrl);
         imageProduct.push(imgs);
     }

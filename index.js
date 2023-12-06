@@ -1,10 +1,10 @@
-import { connectDb } from "./data/database.js";
 import express from "express";
 import dotenv from "dotenv";
 import session from "express-session";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+import { connectDb } from "./data/database.js";
 import userRouter from "./routes/user_route.js";
 import authRouter from "./routes/auth_route.js";
 import uploadRouter from "./routes/upload_route.js";
@@ -23,7 +23,6 @@ connectDb()
   });
 
 
-app.use(express.static("public"));
 
 app.use(
   session({
@@ -40,6 +39,7 @@ app.use(
   })
 );
 
+app.use(express.static("public"));
 app.use(cookieParser());
 app.use(express.json());
 

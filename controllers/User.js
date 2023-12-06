@@ -43,7 +43,12 @@ export const updateUser = wrapAsync(async (req, res) => {
   const { name, email, phone, address } = req.body;
   const { id } = req.params;
 
-  const data = await User.findByIdAndUpdate(id, { name, email, phone, address }, { new: true });
+  const data = await User.findByIdAndUpdate(id, {
+    name: name.toLowerCase(),
+    email: email.toLowerCase(),
+    phone,
+    address: address.toLowerCase(),
+  }, { new: true });
   res.status(200).json({
     status: "success",
     data,

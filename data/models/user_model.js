@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import fs from "fs";
 
 import { Avatar, ImageProduct } from "./avatar_model.js";
 import { Product } from "./product_model.js";

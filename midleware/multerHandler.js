@@ -3,30 +3,44 @@ import path from "path";
 import md5 from "md5";
 
 
-const storageA = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "./public/user");
+        if (file.fieldname === 'user') {
+            cb(null, "./public/users");
+        }
+        if (file.fieldname === 'product') {
+            const { id } = req.params;
+            const userId = req.session.userId;
+            cb(null, `./public/product/${userId}/${id}`);
+        }
     },
     filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        const filename = req.session.userId + ext;
-        cb(null, filename);
+        if (file.fieldname === 'user') {
+            const ext = path.extname(file.originalname);
+            const filename = req.session.userId + ext;
+            cb(null, filename);
+        }
+        if (file.fieldname === 'product') {
+            const ext = path.extname(file.originalname);
+            const filename = file.fieldname + Date.now() + ext;
+            cb(null, filename);
+        }
     }
 });
 
-const storageB = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const { id } = req.params;
-        const userId = req.session.userId;
-        cb(null, `./public/product/${userId}/${id}`);
-    },
-    filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        const filename = md5(file.originalname) + ext;
-        cb(null, filename);
+const filter = (req, file, callback) => {
+    var ext = path.extname(file.originalname);
+    if (file.fieldname === 'user' && ext !== '.jpg') {
+        return callback(new Error('Only jpg images are allowed'));
     }
+    if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
+        return callback(new Error('Only images are allowed'));
+    }
+    callback(null, true);
+};
+
+
+export const uploadImage = multer({
+    storage: storage,
+    fileFilter: filter,
 });
-
-
-export const uploadAvatarImage = multer({ storage: storageA });
-export const uploadProductImage = multer({ storage: storageB });
