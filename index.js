@@ -4,15 +4,17 @@ import session from "express-session";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { connectDb } from "./data/database.js";
+import { connectDb } from "./data/config/database.js";
 import userRouter from "./routes/user_route.js";
 import authRouter from "./routes/auth_route.js";
 import uploadRouter from "./routes/upload_route.js";
 import productRouter from "./routes/product_route.js";
 import cartRouter from './routes/cart_route.js';
+import orderRouter from './routes/order_route.js';
 import { dbError, errorMessage } from "./midleware/errorHandler.js";
 
 dotenv.config(".env");
+
 const app = express();
 
 connectDb()
@@ -48,6 +50,7 @@ app.use(authRouter);
 app.use(uploadRouter);
 app.use(productRouter);
 app.use(cartRouter);
+app.use(orderRouter);
 
 app.use(dbError);
 app.use(errorMessage);

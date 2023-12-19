@@ -42,7 +42,6 @@ const productSchema = new mongoose.Schema({
 productSchema.post("findOneAndDelete", async function (product) {
     if (product) {
         await ImageProduct.findOneAndDelete({ productId: product._id });
-        await Cart.findOneAndDelete({ productId: product._id });
         deleteProductId(product.userId, product._id);
     }
 });

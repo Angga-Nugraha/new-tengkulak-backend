@@ -47,6 +47,7 @@ export const uploadproduct = wrapAsync(async (req, res) => {
     const userId = req.session.userId;
     const images = req.files;
 
+
     if (images.length < 1) return res.status(400).json({
         status: "failed",
         msg: "select some image"

@@ -1,24 +1,25 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-    userId: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },
-    productId: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+    _id: {
+        type: String,
         required: true,
-    }],
+    },
     amount: {
         type: Number,
         required: true,
     },
+    response_midtrans: {
+        type: String,
+    },
     status: {
         type: String,
-        enum: ['process', 'success']
     }
-});
+}, { timestamps: true, _id: false, validateBeforeSave: true });
 
 export const Order = mongoose.model('Order', orderSchema);

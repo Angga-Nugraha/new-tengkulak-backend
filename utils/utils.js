@@ -18,7 +18,7 @@ export const createFolder = wrapAsync(async (req, res, next) => {
 
     const product = await Product.findOne({ _id: id });
 
-    if (!product) {
+    if (!product || !product.userId.equals(userId)) {
         return res.sendStatus(404);
     }
 
