@@ -17,6 +17,20 @@ const orderSchema = new mongoose.Schema({
     response_midtrans: {
         type: String,
     },
+    products: [{
+        id: {
+            type: String,
+        },
+        name: {
+            type: String,
+        },
+        price: {
+            type: Number,
+        },
+        quantity: {
+            type: Number,
+        },
+    }],
     status: {
         type: String,
     }

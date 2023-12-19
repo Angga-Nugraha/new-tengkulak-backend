@@ -9,6 +9,7 @@ export const createOrder = wrapAsync(async (req, res) => {
         const order = new Order({
             _id: result.order_id,
             user,
+            products: req.body.item_details,
             amount: result.gross_amount,
             status: result.transaction_status,
             response_midtrans: JSON.stringify(result),
@@ -33,5 +34,34 @@ export const getMyOrder = wrapAsync(async (req, res) => {
     res.status(200).json({
         status: 'success',
         data
+    });
+});
+
+
+export const getOrderDetails = wrapAsync(async (req, res) => {
+    const { orderId } = req.params;
+    const order = await Order.findOne({ _id: orderId });
+
+    await coreApi.transaction.status(order._id).then((result) => {
+        Order.findOneAndUpdate({ _id: orderId }, {
+            response_midtrans: JSON.stringify(result),
+            status: result.transaction_status
+        }, { new: true }).then((data) => {
+            return res.status(200).json({
+                status: "success",
+                msg: data,
+            });
+        }).catch((err) => {
+            return res.status(404).json({
+                status: "failed",
+                msg: err.message,
+            });
+        });
+    }).catch((err) => {
+        return res.status(404).json({
+            status: "failed",
+            msg: err.message,
+        });
+
     });
 });
