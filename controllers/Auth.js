@@ -7,7 +7,7 @@ import { wrapAsync } from "../utils/wrapAsync.js";
 
 export const register = wrapAsync(async (req, res) => {
 
-  const { name, email, phone, password, role, address } = req.body;
+  const { name, email, phone, password, role } = req.body;
 
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
@@ -18,7 +18,6 @@ export const register = wrapAsync(async (req, res) => {
     password: hashPassword,
     role: role,
     phone: phone,
-    address: address.toLowerCase(),
     token: null,
   });
 

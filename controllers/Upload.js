@@ -8,7 +8,7 @@ import { Product } from "../data/models/product_model.js";
 
 
 export const uploadAvatar = wrapAsync(async (req, res) => {
-    const id = req.session.userId;
+    const {id} = req.params;
     const image = req.file;
     const ext = path.extname(image.originalname);
 
@@ -44,7 +44,6 @@ export const uploadAvatar = wrapAsync(async (req, res) => {
 
 export const uploadproduct = wrapAsync(async (req, res) => {
     const { id } = req.params;
-    const userId = req.session.userId;
     const images = req.files;
 
 
@@ -60,7 +59,7 @@ export const uploadproduct = wrapAsync(async (req, res) => {
         const ext = path.extname(image.originalname);
 
 
-        const imgUrl = `${req.protocol}://${req.get('host')}/product/${userId}/${id}/${image.filename}`;
+        const imgUrl = `${req.protocol}://${req.get('host')}/product/${id}/${image.filename}`;
         const imgs = {
             data: fs.readFileSync(image.path),
             contentType: `image/${ext}`,
@@ -74,7 +73,6 @@ export const uploadproduct = wrapAsync(async (req, res) => {
     const data = new ImageProduct({
         img: imageProduct,
         productId: id,
-        userId: userId,
     });
 
     product.imageUrl = imageUrl;

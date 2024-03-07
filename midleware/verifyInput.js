@@ -1,4 +1,5 @@
 export const verifyInput = async (req, res, next) => {
+
     if (req.body.password !== req.body.confPassword) {
         return res
             .status(400)
@@ -15,5 +16,7 @@ export const verifyInput = async (req, res, next) => {
                 msg: "password less then 8 character",
             });
     }
+
+
     next();
 };

@@ -5,10 +5,8 @@ export const createProduct = wrapAsync(async (req, res) => {
     const {
         title, description, price,
         ratting, stock, weight, category } = req.body;
-    const userId = req.session.userId;
 
     const product = new Product({
-        userId,
         title: title.toLowerCase(),
         description: description.toLowerCase(),
         price,
@@ -49,15 +47,6 @@ export const getAllProduct = wrapAsync(async (req, res) => {
     res.status(200).json({
         status: "success",
         data: product
-    });
-});
-
-export const getMyProduct = wrapAsync(async (req, res) => {
-    const userId = req.session.userId;
-    const data = await Product.find({ userId });
-    res.status(200).json({
-        status: 'success',
-        data
     });
 });
 
@@ -105,9 +94,8 @@ export const searchProduct = wrapAsync(async (req, res) => {
 
 export const deleteProduct = wrapAsync(async (req, res) => {
     const { id } = req.params;
-    const userId = req.session.userId;
 
-    const product = await Product.findOneAndDelete({ $and: [{ userId }, { _id: id }] });
+    const product = await Product.findOneAndDelete({ _id: id });
 
     if (!product) {
         return res.status(404).json({

@@ -1,15 +1,9 @@
 import mongoose from "mongoose";
-import fs from "fs";
 import { ImageProduct } from "./avatar_model.js";
 import { deleteProductId } from "../../utils/utils.js";
-import { Cart } from "./cart_model.js";
 
 
 const productSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
     title: {
         type: String,
         required: [true, 'title is required']
@@ -32,17 +26,17 @@ const productSchema = new mongoose.Schema({
     },
     category: {
         type: [String],
-        required: [true, 'Category is required']
     },
     imageUrl: {
         type: [String],
+        default: [],
     },
 }, { timestamps: true, validateBeforeSave: true });
 
 productSchema.post("findOneAndDelete", async function (product) {
     if (product) {
         await ImageProduct.findOneAndDelete({ productId: product._id });
-        deleteProductId(product.userId, product._id);
+        deleteProductId(product._id);
     }
 });
 

@@ -1,23 +1,21 @@
 import multer from "multer";
 import path from "path";
-import md5 from "md5";
-
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.fieldname === 'user') {
-            cb(null, "./public/users");
+            cb(null, "./public/users/");
         }
         if (file.fieldname === 'product') {
             const { id } = req.params;
-            const userId = req.session.userId;
-            cb(null, `./public/product/${userId}/${id}`);
+            cb(null, `./public/product/${id}`);
         }
     },
     filename: (req, file, cb) => {
         if (file.fieldname === 'user') {
             const ext = path.extname(file.originalname);
-            const filename = req.session.userId + ext;
+            const { id } = req.params;
+            const filename = id + ext;
             cb(null, filename);
         }
         if (file.fieldname === 'product') {
@@ -30,7 +28,7 @@ const storage = multer.diskStorage({
 
 const filter = (req, file, callback) => {
     var ext = path.extname(file.originalname);
-    if (file.fieldname === 'user' && ext !== '.jpg') {
+    if (file.fieldname === 'user' && ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
         return callback(new Error('Only jpg images are allowed'));
     }
     if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
